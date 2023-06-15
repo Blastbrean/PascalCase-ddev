@@ -1,0 +1,9 @@
+{
+	"type": "module",
+	"dependencies": {
+		"chokidar": "^3.5.3",
+		"luabundle": "^1.6.0",
+		"luamin": "^1.0.4",
+		"luaparse": "^0.3.1"
+	}
+}
