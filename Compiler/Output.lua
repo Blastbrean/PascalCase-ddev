@@ -40,7 +40,7 @@ local __bundle_require, __bundle_loaded, __bundle_register, __bundle_modules = (
 	end
 
 	return require, loaded, register, modules
-end)(nil)
+end)(require)
 __bundle_register("__root", function(require, _LOADED, __bundle_register, __bundle_modules)
 -- Check for cloneref...
 -- If it doesn't exist, we will halt the script (special and important function...)
