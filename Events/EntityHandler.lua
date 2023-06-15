@@ -4,7 +4,7 @@ local EntityHandler = {
 }
 
 -- Requires
-local AutoParry = require("../Features/AutoParry.lua")
+local AutoParry = require("Features/AutoParry")
 
 function EntityHandler.CallbackFn(Entity)
 	-- Call AutoParry...

@@ -1,7 +1,7 @@
 local DrawObject = {}
 
 -- Requires
-local Helper = require("../Modules/Helpers/Helper.lua")
+local Helper = require("Modules/Helpers/Helper")
 
 function DrawObject:Update(Data)
 	if not self.Drawing then

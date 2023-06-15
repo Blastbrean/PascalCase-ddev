@@ -1,7 +1,7 @@
 local CombatTab = {}
 
 -- Requires
-local Pascal = require("../Modules/Helpers/Pascal.lua")
+local Pascal = require("Modules/Helpers/Pascal")
 
 -- Services
 local HttpService = GetService("HttpService")

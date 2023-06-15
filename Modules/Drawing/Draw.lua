@@ -1,8 +1,8 @@
 local Draw = { Objects = {} }
 
 -- Requires
-local DrawObject = require("../Modules/Drawing/DrawObject.lua")
-local Helper = require("../Modules/Helpers/Helper.lua")
+local DrawObject = require("Modules/Drawing/DrawObject")
+local Helper = require("Modules/Helpers/Helper")
 
 function Draw:NewObject(Type)
 	-- Create a new drawing object with type.

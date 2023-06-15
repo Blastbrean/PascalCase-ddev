@@ -1,13 +1,13 @@
 local Menu = {}
 
 -- Requires
-local Library = require("../UI/Library/Library.lua")
+local Library = require("UI/Library/Library")
 
 -- Tabs
-local SettingsTab = require("../UI/Tabs/SettingsTab.lua")
-local MovementTab = require("../UI/Tabs/MovementTab.lua")
-local CombatTab = require("../UI/Tabs/CombatTab.lua")
-local VisualsTab = require("../UI/Tabs/VisualsTab.lua")
+local SettingsTab = require("UI/Tabs/SettingsTab")
+local MovementTab = require("UI/Tabs/MovementTab")
+local CombatTab = require("UI/Tabs/CombatTab")
+local VisualsTab = require("UI/Tabs/VisualsTab")
 
 function Menu:Setup()
 	-- Create Window

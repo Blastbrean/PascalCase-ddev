@@ -1,8 +1,8 @@
 local Movement = {}
 
 -- Requires
-local Helper = require("../Modules/Helpers/Helper.lua")
-local Pascal = require("../Modules/Helpers/Pascal.lua")
+local Helper = require("Modules/Helpers/Helper")
+local Pascal = require("Modules/Helpers/Pascal")
 
 function Movement:ResetNoclipFn()
 	-- We don't want to run this if we cannot get the LocalPlayer...

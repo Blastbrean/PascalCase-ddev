@@ -37,8 +37,8 @@ local AutoParryLogger = {
 local WorkspaceService = GetService("Workspace")
 
 -- Requires
-local Helper = require("../Modules/Helpers/Helper.lua")
-local Pascal = require("../Modules/Helpers/Pascal.lua")
+local Helper = require("Modules/Helpers/Helper")
+local Pascal = require("Modules/Helpers/Pascal")
 
 function AutoParryLogger.GetDistanceBetweenParts(Part1, Part2)
 	-- Nullify out the height in our calculations

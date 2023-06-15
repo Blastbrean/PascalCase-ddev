@@ -3,8 +3,8 @@ local GameNameCallHook = {
 }
 
 -- Requires
-local Pascal = require("../Modules/Helpers/Pascal.lua")
-local Helper = require("../Modules/Helpers/Helper.lua")
+local Pascal = require("Modules/Helpers/Pascal")
+local Helper = require("Modules/Helpers/Helper")
 
 function GameNameCallHook.HookFn(Self, ...)
 	-- This is us...

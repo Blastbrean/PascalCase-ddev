@@ -10,9 +10,9 @@ local VirtualInputManagerService = GetService("VirtualInputManager")
 local WorkspaceService = GetService("Workspace")
 
 -- Requires
-local Helper = require("../Modules/Helpers/Helper.lua")
-local Pascal = require("../Modules/Helpers/Pascal.lua")
-local Remotes = require("../Modules/Deepwoken/Remotes.lua")
+local Helper = require("Modules/Helpers/Helper")
+local Pascal = require("Modules/Helpers/Pascal")
+local Remotes = require("Modules/Deepwoken/Remotes")
 
 -- Simulate what a keyboard would do when pressing a key using VirtualInputManager:SendKeyEvent
 function AutoParry.SimulateKeyFromKeyEvents(KeyCode)

@@ -1,7 +1,7 @@
 local MovementTab = {}
 
 -- Requires
-local Pascal = require("../Modules/Helpers/Pascal.lua")
+local Pascal = require("Modules/Helpers/Pascal")
 
 function MovementTab:CreateElements()
 	local LeftGroupBox = self.Tab:AddLeftGroupbox("Player")

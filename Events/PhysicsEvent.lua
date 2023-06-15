@@ -2,7 +2,7 @@
 local PhysicsEvent = {}
 
 -- Requires
-local Movement = require("../Features/Movement.lua")
+local Movement = require("Features/Movement")
 
 function PhysicsEvent.CallbackFn()
 	-- Run Noclip function...

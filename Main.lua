@@ -15,26 +15,26 @@ local Workspace = GetService("Workspace")
 local UserInputService = GetService("UserInputService")
 
 -- Requires
-local Draw = require("../Modules/Drawing/Draw.lua")
-local Event = require("../Modules/Helpers/Event.lua")
-local Thread = require("../Modules/Helpers/Thread.lua")
-local Pascal = require("../Modules/Helpers/Pascal.lua")
-local Remotes = require("../Modules/Deepwoken/Remotes.lua")
-local Helper = require("../Modules/Helpers/Helper.lua")
-local Movement = require("../Features/Movement.lua")
-local Menu = require("../UI/Menu.lua")
+local Draw = require("Modules/Drawing/Draw")
+local Event = require("Modules/Helpers/Event")
+local Thread = require("Modules/Helpers/Thread")
+local Pascal = require("Modules/Helpers/Pascal")
+local Remotes = require("Modules/Deepwoken/Remotes")
+local Helper = require("Modules/Helpers/Helper")
+local Movement = require("Features/Movement")
+local Menu = require("UI/Menu")
 
 -- Hooking
-local HookHandler = require("../Modules/Helpers/HookHandler.lua")
+local HookHandler = require("Modules/Helpers/HookHandler")
 
 -- Entity folder...
 local EntityFolder = Workspace:WaitForChild("Live")
 
 -- Events
-local RenderEvent = require("../Events/RenderEvent.lua")
-local PhysicsEvent = require("../Events/PhysicsEvent.lua")
-local EntityHandler = require("../Events/EntityHandler.lua")
-local JumpRequest = require("../Events/JumpRequest.lua")
+local RenderEvent = require("Events/RenderEvent")
+local PhysicsEvent = require("Events/PhysicsEvent")
+local EntityHandler = require("Events/EntityHandler")
+local JumpRequest = require("Events/JumpRequest")
 
 -- Create logger, thread, and event.
 local MainThread = Thread:New()

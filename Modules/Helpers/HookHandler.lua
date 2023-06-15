@@ -1,11 +1,11 @@
 local HookHandler = {}
 
 -- Requires
-local Pascal = require("../Modules/Helpers/Pascal.lua")
+local Pascal = require("Modules/Helpers/Pascal")
 
 -- Hooks
-local GameNewIndexHook = require("../Hooks/GameNewIndexHook.lua")
-local GameNameCallHook = require("../Hooks/GameNameCallHook.lua")
+local GameNewIndexHook = require("Hooks/GameNewIndexHook")
+local GameNameCallHook = require("Hooks/GameNameCallHook")
 
 function HookHandler:RemoveHooks()
 	if not GameNewIndexHook.OriginalFn or not GameNameCallHook.OriginalFn then

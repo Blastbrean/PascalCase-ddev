@@ -9,8 +9,8 @@ local ReplicatedStorageService = GetService("ReplicatedStorage")
 local HttpService = GetService("HttpService")
 
 -- Requires
-local Helper = require("../Modules/Helpers/Helper.lua")
-local Pascal = require("../Modules/Helpers/Pascal.lua")
+local Helper = require("Modules/Helpers/Helper")
+local Pascal = require("Modules/Helpers/Pascal")
 
 function Remotes.GetKeyHandlerModule()
 	local Modules = ReplicatedStorageService:FindFirstChild("Modules")

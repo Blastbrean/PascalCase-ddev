@@ -1,7 +1,7 @@
 local VisualsTab = {}
 
 -- Requires
-local Pascal = require("../Modules/Helpers/Pascal.lua")
+local Pascal = require("Modules/Helpers/Pascal")
 
 function VisualsTab:CreateElements()
 	local TabBox = self.Tab:AddLeftTabbox("ESPTabBox")

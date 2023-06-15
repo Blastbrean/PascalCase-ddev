@@ -89,9 +89,9 @@ local DefaultSettings = {
 }
 
 -- Requires
-local Logger = require("../Modules/Logging/Logger.lua")
-local EffectReplication = require("../Modules/Deepwoken/EffectReplication.lua")
-local Helper = require("../Modules/Helpers/Helper.lua")
+local Logger = require("Modules/Logging/Logger")
+local EffectReplication = require("Modules/Deepwoken/EffectReplication")
+local Helper = require("Modules/Helpers/Helper")
 
 -- Variables
 local LoggerObject = Logger:New()

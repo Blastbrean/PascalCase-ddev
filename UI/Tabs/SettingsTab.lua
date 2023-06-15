@@ -1,9 +1,9 @@
 local SettingsTab = {}
 
 -- Requires
-local Pascal = require("../Modules/Helpers/Pascal.lua")
-local ThemeManager = require("../UI/Library/ThemeManager.lua")
-local SaveManager = require("../UI/Library/SaveManager.lua")
+local Pascal = require("Modules/Helpers/Pascal")
+local ThemeManager = require("UI/Library/ThemeManager")
+local SaveManager = require("UI/Library/SaveManager")
 
 function SettingsTab:SetupSaveManager(Library)
 	SaveManager:SetLibrary(Library)
