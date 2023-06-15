@@ -6,6 +6,11 @@ Click [here](https://github.com/retarded-person/PascalCase/tree/main) for the ma
 
 Report issues to our discord server: https://discord.gg/J93MDwH5
 
+# Libraries
+[Linoria Lib](https://github.com/violin-suzutsuki/LinoriaLib)
+
+[Sirius Sense](https://github.com/shlexware/Sirius/blob/request/library/sense/Documentation.md)
+
 # Features
 * Auto-parry
     * Logging of animations
