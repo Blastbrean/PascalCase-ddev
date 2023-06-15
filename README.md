@@ -22,5 +22,5 @@ Report issues to our discord server: https://discord.gg/J93MDwH5
 
 ## Images / Videos
 <p align="center">
-    <img src="https://cdn.discordapp.com/attachments/1118248695394209824/1118287268076073060/ApplicationFrameHost_269UhOHU6H.gif" />
+    <img src="https://cdn.discordapp.com/attachments/1118227974198677588/1118801114964443156/DiscordCanary_8zsYYTHUL8.gif" />
 </p>
