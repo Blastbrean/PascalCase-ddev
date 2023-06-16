@@ -482,6 +482,7 @@ function AutoParry:OnAnimationPlayed(EntityData, AnimationTrack, Animation, Play
 	if BuilderData.ParryRepeat and not BuilderData.ShouldBlock and not BuilderData.ShouldRoll then
 		local RepeatDelayResult = nil
 
+		-- Loop how many times we need to repeat...
 		for RepeatIndex = 1, (BuilderData.ParryRepeatTimes or 0) do
 			-- Parry
 			AutoParry.RunParryFn()
@@ -525,6 +526,7 @@ function AutoParry:OnAnimationPlayed(EntityData, AnimationTrack, Animation, Play
 			end
 		end
 
+		-- Return...
 		return
 	end
 
@@ -543,6 +545,9 @@ function AutoParry:OnAnimationPlayed(EntityData, AnimationTrack, Animation, Play
 			),
 			2.0
 		)
+
+		-- Return...
+		return
 	end
 
 	-- Handle blocking
@@ -558,6 +563,9 @@ function AutoParry:OnAnimationPlayed(EntityData, AnimationTrack, Animation, Play
 
 		-- Set animation data that we started blocking
 		AnimationData.StartedBlocking = true
+
+		-- Return...
+		return
 	end
 
 	-- Handle dodging
@@ -567,6 +575,9 @@ function AutoParry:OnAnimationPlayed(EntityData, AnimationTrack, Animation, Play
 
 		-- Notify user that we have dodged
 		Library:Notify(string.format("Dodged animation %s(%s)", BuilderData.NickName, BuilderData.AnimationId), 2.0)
+
+		-- Return...
+		return
 	end
 end
 

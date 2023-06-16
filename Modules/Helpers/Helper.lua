@@ -58,6 +58,10 @@ function Helper.LoopCurrentEntities(SkipLocal, EntityFolder, CallbackFn)
 	end
 end
 
+function Helper.TryAndCatch(Try, Catch)
+	return pcall(Try, Catch) 
+end
+
 function Helper.LoopCurrentPlayers(SkipLocal, CallbackFn)
 	for Index, Player in next, PlayerService:GetChildren() do
 		local Character = Player.Character

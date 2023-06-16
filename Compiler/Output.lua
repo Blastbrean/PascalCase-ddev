@@ -88,84 +88,104 @@ local EntityHandlerObject = Event:New(EntityFolder.ChildAdded)
 local JumpRequestObject = Event:New(UserInputService.JumpRequest)
 
 local function StartDetachFn()
-	if not Pascal:IsScriptShuttingDown() then
-		return
-	end
+	Helper.TryAndCatch(
+		-- Try...
+		function()
+			if not Pascal:IsScriptShuttingDown() then
+				return
+			end
 
-	-- Unload menu...
-	Menu:Unload()
+			-- Unload menu...
+			Menu:Unload()
 
-	-- Reset Pascal...
-	Pascal:Reset()
+			-- Reset Pascal...
+			Pascal:Reset()
 
-	-- Remove events...
-	RenderEventObject:Disconnect()
-	EntityHandlerObject:Disconnect()
-	PhysicsEventObject:Disconnect()
-	JumpRequestObject:Disconnect()
+			-- Remove events...
+			RenderEventObject:Disconnect()
+			EntityHandlerObject:Disconnect()
+			PhysicsEventObject:Disconnect()
+			JumpRequestObject:Disconnect()
 
-	-- Special disconnect (see EventHandler)...
-	if EntityHandler.DisconnectAutoParry then
-		EntityHandler.DisconnectAutoParry()
-	end
+			-- Special disconnect (see EventHandler)...
+			if EntityHandler.DisconnectAutoParry then
+				EntityHandler.DisconnectAutoParry()
+			end
 
-	-- Reset movement related stuff...
-	Movement:ResetNoclipFn()
+			-- Reset movement related stuff...
+			Movement:ResetNoclipFn()
 
-	-- Disconnect stuff...
-	Pascal:GetEffectReplicator():Disconnect()
+			-- Disconnect stuff...
+			Pascal:GetEffectReplicator():Disconnect()
 
-	-- Remove drawings...
-	Draw:Clear()
+			-- Remove drawings...
+			Draw:Clear()
 
-	-- Remove hooks...
-	if not HookHandler:RemoveHooks() then
-		Pascal:GetLogger():Print("Unable to remove hooks while detaching!")
-	end
+			-- Remove hooks...
+			if not HookHandler:RemoveHooks() then
+				Pascal:GetLogger():Print("Unable to remove hooks while detaching!")
+			end
 
-	-- Remove override on remote table...
-	Remotes.ResetOverrideGetRemote()
+			-- Remove override on remote table...
+			Remotes.ResetOverrideGetRemote()
+		end,
+
+		-- Catch...
+		function(Error)
+			Pascal:GetLogger():Print("StartDetachFn - Exception caught: %s", Error)
+		end
+	)
 
 	-- Stop script and return...
 	return Pascal:StopScriptWithReason(MainThread, "Detached from script!")
 end
 
 local function MainThreadFn()
-	-- Check for all methods, if we are missing any, stop the thread and return.
-	if not Pascal:CheckForAllMethods() then
-		return Pascal:StopScriptWithReason(MainThread, "Failed to find all needed methods!")
-	end
+	Helper.TryAndCatch(
+		-- Try...
+		function()
+			-- Check for all methods, if we are missing any, stop the thread and return.
+			if not Pascal:CheckForAllMethods() then
+				return Pascal:StopScriptWithReason(MainThread, "Failed to find all needed methods!")
+			end
 
-	-- Override remote table...
-	Remotes.OverrideGetRemoteFromRemoteTable()
+			-- Override remote table...
+			Remotes.OverrideGetRemoteFromRemoteTable()
 
-	-- Start hooks...
-	if not HookHandler:StartHooks() then
-		return Pascal:StopScriptWithReason(MainThread, "Failed to start hooks!")
-	end
+			-- Start hooks...
+			if not HookHandler:StartHooks() then
+				return Pascal:StopScriptWithReason(MainThread, "Failed to start hooks!")
+			end
 
-	-- Reset Pascal...
-	Pascal:Reset()
+			-- Reset Pascal...
+			Pascal:Reset()
 
-	-- Create menu...
-	Menu:Setup()
+			-- Create menu...
+			Menu:Setup()
 
-	-- Connect all events...
-	RenderEventObject:Connect(RenderEvent.CallbackFn)
-	PhysicsEventObject:Connect(PhysicsEvent.CallbackFn)
-	EntityHandlerObject:Connect(EntityHandler.CallbackFn)
-	JumpRequestObject:Connect(JumpRequest.CallbackFn)
+			-- Connect all events...
+			RenderEventObject:Connect(RenderEvent.CallbackFn)
+			PhysicsEventObject:Connect(PhysicsEvent.CallbackFn)
+			EntityHandlerObject:Connect(EntityHandler.CallbackFn)
+			JumpRequestObject:Connect(JumpRequest.CallbackFn)
 
-	-- EntityHandler is a special event...
-	-- We should call the CallbackFn with our current entities...
-	Helper.LoopCurrentEntities(false, EntityFolder, function(Index, Entity)
-		EntityHandler.CallbackFn(Entity)
-	end)
+			-- EntityHandler is a special event...
+			-- We should call the CallbackFn with our current entities...
+			Helper.LoopCurrentEntities(false, EntityFolder, function(Index, Entity)
+				EntityHandler.CallbackFn(Entity)
+			end)
 
-	-- Wait for detach
-	repeat
-		task.wait()
-	until Pascal:IsScriptShuttingDown()
+			-- Wait for detach
+			repeat
+				task.wait()
+			until Pascal:IsScriptShuttingDown()
+		end,
+
+		-- Catch...
+		function(Error)
+			Pascal:GetLogger():Print("MainThreadFn - Exception caught: %s", Error)
+		end
+	)
 
 	-- Run detach code
 	StartDetachFn()
@@ -514,6 +534,10 @@ function Helper.LoopCurrentEntities(SkipLocal, EntityFolder, CallbackFn)
 
 		break
 	end
+end
+
+function Helper.TryAndCatch(Try, Catch)
+	return pcall(Try, Catch) 
 end
 
 function Helper.LoopCurrentPlayers(SkipLocal, CallbackFn)
@@ -1288,6 +1312,7 @@ function AutoParry:OnAnimationPlayed(EntityData, AnimationTrack, Animation, Play
 	if BuilderData.ParryRepeat and not BuilderData.ShouldBlock and not BuilderData.ShouldRoll then
 		local RepeatDelayResult = nil
 
+		-- Loop how many times we need to repeat...
 		for RepeatIndex = 1, (BuilderData.ParryRepeatTimes or 0) do
 			-- Parry
 			AutoParry.RunParryFn()
@@ -1331,6 +1356,7 @@ function AutoParry:OnAnimationPlayed(EntityData, AnimationTrack, Animation, Play
 			end
 		end
 
+		-- Return...
 		return
 	end
 
@@ -1349,6 +1375,9 @@ function AutoParry:OnAnimationPlayed(EntityData, AnimationTrack, Animation, Play
 			),
 			2.0
 		)
+
+		-- Return...
+		return
 	end
 
 	-- Handle blocking
@@ -1364,6 +1393,9 @@ function AutoParry:OnAnimationPlayed(EntityData, AnimationTrack, Animation, Play
 
 		-- Set animation data that we started blocking
 		AnimationData.StartedBlocking = true
+
+		-- Return...
+		return
 	end
 
 	-- Handle dodging
@@ -1373,6 +1405,9 @@ function AutoParry:OnAnimationPlayed(EntityData, AnimationTrack, Animation, Play
 
 		-- Notify user that we have dodged
 		Library:Notify(string.format("Dodged animation %s(%s)", BuilderData.NickName, BuilderData.AnimationId), 2.0)
+
+		-- Return...
+		return
 	end
 end
 
