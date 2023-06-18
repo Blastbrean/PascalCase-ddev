@@ -1,4 +1,6 @@
-local Movement = {}
+local Movement = {
+	UncollidedInstancesTable = {},
+}
 
 -- Requires
 local Helper = require("Modules/Helpers/Helper")
@@ -11,19 +13,22 @@ function Movement:ResetNoclipFn()
 		return
 	end
 
-	Helper.LoopInstanceChildren(LocalPlayerData.Character, function(Index, Children)
+	Helper.LoopLuaTable(Movement.UncollidedInstancesTable, function(Index, Instance)
 		-- Check if it's a part we want...
-		if not Children:IsA("BasePart") then
+		if not Instance:IsA("BasePart") then
 			return false
 		end
 
 		-- Check if it's already collided...
-		if Children.CanCollide then
+		if Instance.CanCollide then
 			return false
 		end
 
 		-- Collide this part...
-		Children.CanCollide = true
+		Instance.CanCollide = true
+
+		-- Remove part from uncolided table...
+		Movement.UncollidedInstancesTable[Index] = nil
 
 		-- Return false to continue...
 		return false
@@ -72,6 +77,9 @@ function Movement:RunNoclipFn()
 
 		-- Uncollide this part...
 		Children.CanCollide = false
+
+		-- Insert to parts we have uncolided...
+		table.insert(Movement.UncollidedInstancesTable, Children)
 
 		-- Return false to continue...
 		return false

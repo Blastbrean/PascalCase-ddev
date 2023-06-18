@@ -8,6 +8,7 @@ local AutoParry = {
 local Players = GetService("Players")
 local VirtualInputManagerService = GetService("VirtualInputManager")
 local WorkspaceService = GetService("Workspace")
+local StatsService = GetService("Stats")
 
 -- Requires
 local Helper = require("Modules/Helpers/Helper")
@@ -48,7 +49,11 @@ function AutoParry.CheckDistanceBetweenParts(BuilderData, Part1, Part2)
 
 	-- Get distance
 	local Distance = (Part1Position - Part2Position).Magnitude
-	return Distance >= BuilderData.MinimumDistance and Distance <= BuilderData.MaximumDistance
+
+	local DistanceAdjust = (Pascal:GetConfig().AutoParry.AdjustDistancesBySlider or 0)
+	local MinimumDistance = math.max(BuilderData.MinimumDistance, 0)
+	local MaximumDistance = math.max(BuilderData.MaximumDistance + DistanceAdjust, 0)
+	return Distance >= MinimumDistance and Distance <= MaximumDistance
 end
 
 function AutoParry.HasTalent(Entity, TalentString)
@@ -193,13 +198,49 @@ function AutoParry.MovementCheck(EffectReplicator)
 	return true
 end
 
+function AutoParry.CheckFacingThresholdOnPlayers(LocalPlayerData, HumanoidRootPart)
+	local DeltaOnTargetToLocal = (LocalPlayerData.HumanoidRootPart.Position - HumanoidRootPart.Position).Unit
+	local TargetToLocalResult = LocalPlayerData.HumanoidRootPart.CFrame.LookVector:Dot(DeltaOnTargetToLocal) <= -0.1
+	local DeltaOnLocalToTarget = (HumanoidRootPart.Position - LocalPlayerData.HumanoidRootPart.Position).Unit
+	local LocalToTargetResult = HumanoidRootPart.CFrame.LookVector:Dot(DeltaOnLocalToTarget) <= -0.1
+
+	-- Check if enemy looking at you...
+	if Pascal:GetConfig().AutoParry.EnemyLookingAtYou and not Pascal:GetConfig().AutoParry.IfLookingAtEnemy then
+		return TargetToLocalResult
+	end
+
+	-- Check if looking at enemy...
+	if Pascal:GetConfig().AutoParry.IfLookingAtEnemy and not Pascal:GetConfig().AutoParry.EnemyLookingAtYou then
+		return LocalToTargetResult
+	end
+
+	-- Check if enemy looking at you and you looking at enemy...
+	if Pascal:GetConfig().AutoParry.EnemyLookingAtYou and Pascal:GetConfig().AutoParry.IfLookingAtEnemy then
+		return TargetToLocalResult and LocalToTargetResult
+	end
+
+	-- Return true otherwise...
+	return true
+end
+
 function AutoParry.ValidateState(AnimationTrack, BuilderData, LocalPlayerData, HumanoidRootPart, Player, AfterDelay)
-	-- Check animation distance
-	if
-		not AutoParry.CheckDistanceBetweenParts(BuilderData, HumanoidRootPart, LocalPlayerData.HumanoidRootPart)
-		and Player ~= LocalPlayerData.Player
-	then
-		return false
+	-- Only do this if there is a valid humanoid-root-part...
+	if HumanoidRootPart and LocalPlayerData.HumanoidRootPart then
+		-- Check animation distance
+		if
+			not AutoParry.CheckDistanceBetweenParts(BuilderData, HumanoidRootPart, LocalPlayerData.HumanoidRootPart)
+			and Player ~= LocalPlayerData.Player
+		then
+			return false
+		end
+
+		-- Check if players are facing each-other
+		if
+			not AutoParry.CheckFacingThresholdOnPlayers(LocalPlayerData, HumanoidRootPart)
+			and Player ~= LocalPlayerData.Player
+		then
+			return false
+		end
 	end
 
 	-- Effect handling...
@@ -420,7 +461,7 @@ function AutoParry:OnAnimationPlayed(EntityData, AnimationTrack, Animation, Play
 		return
 	end
 
-	-- Calculate delay
+	-- Calculate delay(s)
 	local AttemptMilisecondsConvertedToSeconds = tonumber(BuilderData.AttemptDelay)
 			and tonumber(BuilderData.AttemptDelay) / 1000
 		or 0
@@ -429,20 +470,27 @@ function AutoParry:OnAnimationPlayed(EntityData, AnimationTrack, Animation, Play
 			and tonumber(BuilderData.ParryRepeatDelay) / 1000
 		or 0
 
+	-- Delay(s) accounting for global delay
+	AttemptMilisecondsConvertedToSeconds = AttemptMilisecondsConvertedToSeconds
+		+ ((Pascal:GetConfig().AutoParry.AdjustTimingsBySlider / 1000) or 0)
+
+	RepeatMilisecondsConvertedToSeconds = RepeatMilisecondsConvertedToSeconds
+		+ ((Pascal:GetConfig().AutoParry.AdjustTimingsBySlider / 1000) or 0)
+
 	-- Ping converted to two decimal places...
-	local PingAdjustmentAmount = LocalPlayerData.Player:GetNetworkPing()
+	local PingAdjustmentAmount = math.max(StatsService.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000, 0.0)
 		* math.clamp(((Pascal:GetConfig().AutoParry.PingAdjust or 0) / 100), 0.0, 1.0)
 
 	local RepeatDelayAccountingForPingAdjustment =
-		math.clamp(RepeatMilisecondsConvertedToSeconds - PingAdjustmentAmount, 0.0, math.huge)
+		math.max(RepeatMilisecondsConvertedToSeconds - PingAdjustmentAmount, 0.0)
 
 	local AttemptDelayAccountingForPingAdjustment =
-		math.clamp(AttemptMilisecondsConvertedToSeconds - PingAdjustmentAmount, 0.0, math.huge)
+		math.max(AttemptMilisecondsConvertedToSeconds - PingAdjustmentAmount, 0.0)
 
 	-- Notify user that animation has started
 	Library:Notify(
 		string.format(
-			"Delaying on animation %s(%s) for %.3f seconds (%.3f / %.3f) (%.3f) (%.3f)",
+			"Delaying on animation %s(%s) for %.3f seconds",
 			BuilderData.NickName,
 			BuilderData.AnimationId,
 			AttemptDelayAccountingForPingAdjustment,
@@ -483,7 +531,7 @@ function AutoParry:OnAnimationPlayed(EntityData, AnimationTrack, Animation, Play
 		local RepeatDelayResult = nil
 
 		-- Loop how many times we need to repeat...
-		for RepeatIndex = 1, (BuilderData.ParryRepeatTimes or 0) do
+		for RepeatIndex = 0, (BuilderData.ParryRepeatTimes or 0) do
 			-- Parry
 			AutoParry.RunParryFn()
 
@@ -612,27 +660,48 @@ function AutoParry:OnEntityAdded(Entity)
 	table.insert(
 		AutoParry.Connections,
 		Animator.AnimationPlayed:Connect(function(AnimationTrack)
-			-- Call OnAnimationPlayed...
-			AutoParry:OnAnimationPlayed(
-				EntityData,
-				AnimationTrack,
-				AnimationTrack.Animation,
-				Helper.GetPlayerFromEntity(Entity),
-				HumanoidRootPart
-			)
+			Helper.TryAndCatch(
+				-- Try...
+				function()
+					-- Call OnAnimationPlayed...
+					AutoParry:OnAnimationPlayed(
+						EntityData,
+						AnimationTrack,
+						AnimationTrack.Animation,
+						Helper.GetPlayerFromEntity(Entity),
+						HumanoidRootPart
+					)
 
-			-- Connect event to OnAnimationEnded...
-			table.insert(
-				AutoParry.Connections,
-				AnimationTrack.Stopped:Connect(function()
-					-- Stop blocking input if need be...
-					if Pascal:GetConfig().AutoParry.DelayM1 then
-						Remotes.ShouldBlockInput = false
-					end
+					-- Connect event to OnAnimationEnded...
+					table.insert(
+						AutoParry.Connections,
+						AnimationTrack.Stopped:Connect(function()
+							Helper.TryAndCatch(
+								-- Try...
+								function()
+									-- Stop blocking input if need be...
+									if Pascal:GetConfig().AutoParry.DelayM1 then
+										Remotes.ShouldBlockInput = false
+									end
 
-					-- Call OnAnimationEnded...
-					AutoParry:OnAnimationEnded(EntityData)
-				end)
+									-- Call OnAnimationEnded...
+									AutoParry:OnAnimationEnded(EntityData)
+								end,
+
+								-- Catch...
+								function(Error)
+									Pascal:GetLogger()
+										:Print("AutoParry (AnimationTrack.Stopped) - Caught exception: %s", Error)
+								end
+							)
+						end)
+					)
+				end,
+
+				-- Catch...
+				function(Error)
+					Pascal:GetLogger():Print("AutoParry (AnimationTrack.Played) - Caught exception: %s", Error)
+				end
 			)
 		end)
 	)

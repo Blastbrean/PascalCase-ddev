@@ -171,7 +171,7 @@ function CombatTab:AutoParryGroup()
 		Default = 5,
 		Min = 0,
 		Max = 100,
-		Rounding = 1,
+		Rounding = 0,
 		Compact = false,
 		Suffix = "m",
 
@@ -185,7 +185,7 @@ function CombatTab:AutoParryGroup()
 		Default = 15,
 		Min = 0,
 		Max = 100,
-		Rounding = 1,
+		Rounding = 0,
 		Compact = false,
 		Suffix = "m",
 
@@ -323,7 +323,7 @@ function CombatTab:AutoParryGroup()
 		Default = 5,
 		Min = 0,
 		Max = 100,
-		Rounding = 1,
+		Rounding = 0,
 		Compact = false,
 		Suffix = "m",
 
@@ -337,7 +337,7 @@ function CombatTab:AutoParryGroup()
 		Default = 15,
 		Min = 0,
 		Max = 100,
-		Rounding = 1,
+		Rounding = 0,
 		Compact = false,
 		Suffix = "m",
 
@@ -356,6 +356,10 @@ function CombatTab:AutoParryGroup()
 		Text = "Enable auto-parry",
 		Default = false, -- Default value (true / false)
 		Callback = function(Value)
+			if Value == false then
+				Library:Notify("You have enabled the SmartParry technology!", 3.0)
+			end
+
 			Pascal:GetConfig().AutoParry.Enabled = Value
 		end,
 	})
@@ -436,7 +440,7 @@ function CombatTab:AutoParryGroup()
 		Default = 25,
 		Min = 0,
 		Max = 100,
-		Rounding = 1,
+		Rounding = 0,
 		Compact = false,
 		Suffix = "%",
 
@@ -445,12 +449,40 @@ function CombatTab:AutoParryGroup()
 		end,
 	})
 
+	SubTab3:AddSlider("GlobalTimingAdjustSlider", {
+		Text = "Adjust timings by slider",
+		Default = 0,
+		Min = -1000,
+		Max = 1000,
+		Rounding = 0,
+		Compact = false,
+		Suffix = "ms",
+
+		Callback = function(Value)
+			Pascal:GetConfig().AutoParry.AdjustTimingsBySlider = Value
+		end,
+	})
+
+	SubTab3:AddSlider("GlobalDistanceAdjustSlider", {
+		Text = "Adjust distances by slider",
+		Default = 0,
+		Min = -100,
+		Max = 100,
+		Rounding = 0,
+		Compact = false,
+		Suffix = "m",
+
+		Callback = function(Value)
+			Pascal:GetConfig().AutoParry.AdjustDistancesBySlider = Value
+		end,
+	})
+
 	SubTab3:AddSlider("HitchanceSlider", {
 		Text = "Chance to activate auto-parry",
 		Default = 100,
 		Min = 0,
 		Max = 100,
-		Rounding = 1,
+		Rounding = 0,
 		Compact = false,
 		Suffix = "%",
 
