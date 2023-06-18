@@ -3042,17 +3042,6 @@ function Library:DeleteNonPlayingAnimationData(Name)
 
 		AnimationData = nil
 		InfoLoggerPlayerData.AnimationDataTable[Index] = nil
-
-		if getgenv().Settings.AutoParryBuilder.BuilderSettingsList[Index] then
-			Library:Notify(
-				string.format(
-					"Animation %s ended (%.3f)",
-					getgenv().Settings.AutoParryBuilder.BuilderSettingsList[Index].NickName,
-					os.clock()
-				),
-				3.0
-			)
-		end
 	end
 end
 
