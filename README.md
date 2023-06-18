@@ -11,6 +11,8 @@ Report issues to our discord server: https://discord.gg/J93MDwH5
 
 [Sirius Sense](https://github.com/shlexware/Sirius/blob/request/library/sense/Documentation.md)
 
+[AES for Lua](https://github.com/bighil/aeslua)
+
 # Features
 * Auto-parry
     * Logging of animations
