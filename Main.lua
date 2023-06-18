@@ -15,7 +15,6 @@ local Workspace = GetService("Workspace")
 local UserInputService = GetService("UserInputService")
 
 -- Requires
-local Draw = require("Modules/Drawing/Draw")
 local Event = require("Modules/Helpers/Event")
 local Thread = require("Modules/Helpers/Thread")
 local Pascal = require("Modules/Helpers/Pascal")
@@ -54,6 +53,9 @@ local function StartDetachFn()
 			-- Unload menu...
 			Menu:Unload()
 
+			-- Unload sense...
+			Pascal:GetSense().Unload()
+
 			-- Reset Pascal...
 			Pascal:Reset()
 
@@ -73,9 +75,6 @@ local function StartDetachFn()
 
 			-- Disconnect stuff...
 			Pascal:GetEffectReplicator():Disconnect()
-
-			-- Remove drawings...
-			Draw:Clear()
 
 			-- Remove hooks...
 			if not HookHandler:RemoveHooks() then
@@ -115,6 +114,9 @@ local function MainThreadFn()
 
 			-- Reset Pascal...
 			Pascal:Reset()
+
+			-- Load sense...
+			Pascal:GetSense().Load()
 
 			-- Create menu...
 			Menu:Setup()

@@ -53,6 +53,7 @@ local DefaultSettings = {
 		InputMethod = "Remotes",
 		AutoFeint = false,
 		DelayM1 = false,
+		HoldM1 = false,
 		IfLookingAtEnemy = false,
 		EnemyLookingAtYou = false,
 		LocalAttackAutoParry = false,
@@ -92,6 +93,7 @@ local DefaultSettings = {
 local Logger = require("Modules/Logging/Logger")
 local EffectReplication = require("Modules/Deepwoken/EffectReplication")
 local Helper = require("Modules/Helpers/Helper")
+local Sense = require("Modules/Drawing/Sense")
 
 -- Variables
 local LoggerObject = Logger:New()
@@ -112,6 +114,10 @@ function Pascal:GetBuilderSettingFromIdentifier(Identifier)
 			Data = BuilderSetting,
 		}
 	end)
+end
+
+function Pascal:GetSense()
+	return Sense
 end
 
 function Pascal:GetLogger()

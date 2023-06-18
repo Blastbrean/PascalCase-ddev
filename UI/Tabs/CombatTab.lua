@@ -393,6 +393,15 @@ function CombatTab:AutoParryGroup()
 		end,
 	})
 
+	SubTab3:AddToggle("EnableM1Hold", {
+		Text = "M1 Hold",
+		Default = false, -- Default value (true / false)
+		Tooltip = "Allow yourself to simply hold down your attack button and swing automatically!",
+		Callback = function(Value)
+			Pascal:GetConfig().AutoParry.HoldM1 = Value
+		end,
+	})
+
 	SubTab3:AddToggle("EnableAutoTimeM1Toggle", {
 		Text = "Delay M1s until animation ends",
 		Default = false, -- Default value (true / false)
