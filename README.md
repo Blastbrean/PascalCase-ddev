@@ -4,8 +4,6 @@ Click [here](https://github.com/retarded-person/PascalCase/tree/main) for the ma
 # PascalCase (DDev)
 <i>Free and open-source script for [Deepwoken Dev](https://www.roblox.com/games/10138901829/MANTRAS-Deepwoken-Dev)</i>
 
-There is ban-prevention system in our script which stops the game from banning you, as long as it is running.
-
 Report issues to our discord server: https://discord.gg/J93MDwH5
 
 # Libraries
@@ -33,6 +31,9 @@ Report issues to our discord server: https://discord.gg/J93MDwH5
     * Weapon ESP
     * Chams
     * Off-screen arrows
+* Ban-prevention
+   * This is built-in to the script. It will stop the game from banning you, as long as it is running. Your character **WILL** break, forcing a death to reset.
+
 **More to come, soon.**
 
 ## Images / Videos
