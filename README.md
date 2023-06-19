@@ -18,6 +18,16 @@ Report issues to our discord server: https://discord.gg/J93MDwH5
     * Hard to get working, potential to be good depending on the config
     * Config system for those who cannot bother
     * Parsing of Linoria Configurations (you must decrypt them first)
+* Combat
+    * Ping-adjustment
+    * Global distance adjustment
+    * Global timing adjustment
+    * Blatant roll
+    * Roll on feints
+    * Roll cancel adjustment (delay, min-distance, max-distance)
+    * Delay M1 (block-input)
+    * Hold M1
+    * Auto-feint
 * Movement
     * Infinite-jump
     * Speed-hack
