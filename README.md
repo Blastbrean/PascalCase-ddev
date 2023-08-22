@@ -4,7 +4,7 @@ Click [here](https://github.com/retarded-person/PascalCase/tree/main) for the ma
 # PascalCase (DDev)
 <i>Free and open-source script for [Deepwoken Dev](https://www.roblox.com/games/10138901829/MANTRAS-Deepwoken-Dev)</i>
 
-Report issues to our discord server: https://discord.gg/YnSusN6urq
+Report issues to our discord server: https://discord.gg/tmyKj4y8U7
 
 # Libraries
 [Linoria Lib](https://github.com/violin-suzutsuki/LinoriaLib)
